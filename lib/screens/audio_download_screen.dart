@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:audio_service/audio_service.dart';
 
 class AudioDownloadScreen extends StatefulWidget {
-  final AudioHandler audioHandler;
-
-  const AudioDownloadScreen({super.key, required this.audioHandler});
+  const AudioDownloadScreen({super.key});
 
   @override
   State<AudioDownloadScreen> createState() => _AudioDownloadScreenState();
@@ -17,8 +15,7 @@ class _AudioDownloadScreenState extends State<AudioDownloadScreen> {
   String? _downloadedFilePath;
   bool _isDownloading = false;
 
-  AudioDownloadService get audioService =>
-      widget.audioHandler as AudioDownloadService;
+  final AudioDownloadService audioService = AudioDownloadService();
 
   @override
   Widget build(BuildContext context) {
@@ -157,144 +154,6 @@ class _AudioDownloadScreenState extends State<AudioDownloadScreen> {
             ),
 
             const SizedBox(height: 10),
-
-            // Play Downloaded Audio Button
-            ElevatedButton.icon(
-              onPressed:
-                  _downloadedFilePath != null ? _playDownloadedAudio : null,
-              icon: const Icon(Icons.play_circle_filled),
-              label: const Text('Play Downloaded Audio'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            // Stream Audio Button
-            ElevatedButton.icon(
-              onPressed: _streamAudio,
-              icon: const Icon(Icons.stream),
-              label: const Text('Stream Audio (No Download)'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            // Audio Controls Section
-            Card(
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: StreamBuilder<PlaybackState>(
-                  stream: widget.audioHandler.playbackState,
-                  builder: (context, snapshot) {
-                    final playbackState = snapshot.data;
-                    final isPlaying = playbackState?.playing ?? false;
-                    final processingState =
-                        playbackState?.processingState ??
-                        AudioProcessingState.idle;
-
-                    return Column(
-                      children: [
-                        const Text(
-                          'Audio Controls',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed:
-                                  isPlaying
-                                      ? widget.audioHandler.pause
-                                      : widget.audioHandler.play,
-                              icon: Icon(
-                                isPlaying
-                                    ? Icons.pause_circle_filled
-                                    : Icons.play_circle_filled,
-                                size: 50,
-                                color: Colors.blue,
-                              ),
-                            ),
-                            const SizedBox(width: 20),
-                            IconButton(
-                              onPressed: widget.audioHandler.stop,
-                              icon: const Icon(
-                                Icons.stop_circle,
-                                size: 50,
-                                color: Colors.red,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[100],
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            'Status: ${processingState.name.toUpperCase()}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        if (_downloadedFilePath != null) ...[
-                          const SizedBox(height: 10),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.green[50],
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: Colors.green),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.check_circle,
-                                  color: Colors.green,
-                                  size: 16,
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Text(
-                                    'Downloaded: ${_downloadedFilePath!.split('/').last}',
-                                    style: const TextStyle(
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ],
-                    );
-                  },
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -361,15 +220,5 @@ class _AudioDownloadScreenState extends State<AudioDownloadScreen> {
         _isDownloading = false;
       });
     }
-  }
-
-  Future<void> _playDownloadedAudio() async {
-    if (_downloadedFilePath != null) {
-      await audioService.playFromFile(_downloadedFilePath!);
-    }
-  }
-
-  Future<void> _streamAudio() async {
-    await audioService.playFromUrl(_audioUrl);
   }
 }

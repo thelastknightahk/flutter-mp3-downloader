@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
 import 'screens/audio_download_screen.dart';

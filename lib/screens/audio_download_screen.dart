@@ -1,6 +1,5 @@
 import 'package:audio_background_download/service/audio_download_service.dart';
 import 'package:flutter/material.dart';
-import 'package:audio_service/audio_service.dart';
 
 class AudioDownloadScreen extends StatefulWidget {
   const AudioDownloadScreen({super.key});
@@ -9,10 +8,10 @@ class AudioDownloadScreen extends StatefulWidget {
   State<AudioDownloadScreen> createState() => _AudioDownloadScreenState();
 }
 
+@pragma('vm:entry-point')
 class _AudioDownloadScreenState extends State<AudioDownloadScreen> {
   final String _audioUrl =
       "https://github.com/rafaelreis-hotmart/Audio-Sample-files/raw/master/sample.mp3";
-  String? _downloadedFilePath;
   bool _isDownloading = false;
 
   final AudioDownloadService audioService = AudioDownloadService();
@@ -172,9 +171,7 @@ class _AudioDownloadScreenState extends State<AudioDownloadScreen> {
       );
 
       if (filePath != null) {
-        setState(() {
-          _downloadedFilePath = filePath;
-        });
+        setState(() {});
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

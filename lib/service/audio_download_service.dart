@@ -87,6 +87,7 @@ class AudioDownloadService {
     }
   }
 
+  /// for internal save
   Future<String?> downloadMp3(String url, {String? fileName}) async {
     try {
       // Request permissions
@@ -149,6 +150,78 @@ class AudioDownloadService {
       return null;
     }
   }
+
+  /// for external save
+  //   Future<String?> downloadMp3(String url, {String? fileName}) async {
+  //   try {
+  //     // Request permissions
+  //     await _requestPermissions();
+
+  //     // Get download directory
+  //     Directory directory;
+  //     if (Platform.isAndroid) {
+  //       directory =
+  //           await getExternalStorageDirectory() ??
+  //           await getApplicationDocumentsDirectory();
+  //     } else {
+  //       directory = await getApplicationDocumentsDirectory();
+  //     }
+
+  //     final downloadPath = '${directory.path}/downloads';
+
+  //     // Create directory if it doesn't exist
+  //     await Directory(downloadPath).create(recursive: true);
+
+  //     // Generate filename
+  //     fileName ??= 'audio_${DateTime.now().millisecondsSinceEpoch}.mp3';
+
+  //     // Initialize progress
+  //     _downloadProgressController.add(
+  //       DownloadProgress(
+  //         received: 0,
+  //         total: 100,
+  //         percentage: 0.0,
+  //         speed: 0.0,
+  //         status: DownloadStatus.downloading,
+  //       ),
+  //     );
+
+  //     // Start download
+  //     final taskId = await FlutterDownloader.enqueue(
+  //       url: url,
+  //       savedDir: downloadPath,
+  //       fileName: fileName,
+  //       headers: {}, // Optional headers
+  //       showNotification: true, // Disable notifications to avoid icon issues
+  //       openFileFromNotification: true,
+  //       saveInPublicStorage: true, // Set to false to avoid permission issues
+  //     );
+
+  //     if (taskId != null) {
+  //       _downloadTasks[taskId] = fileName;
+
+  //       // Wait for download completion
+  //       await _waitForDownloadCompletion(taskId);
+
+  //       final filePath = '$downloadPath/$fileName';
+  //       return filePath;
+  //     }
+
+  //     return null;
+  //   } catch (e) {
+  //     print('Download error: $e');
+  //     _downloadProgressController.add(
+  //       DownloadProgress(
+  //         received: 0,
+  //         total: 100,
+  //         percentage: 0.0,
+  //         speed: 0.0,
+  //         status: DownloadStatus.failed,
+  //       ),
+  //     );
+  //     return null;
+  //   }
+  // }
 
   Future<void> _waitForDownloadCompletion(String taskId) async {
     final completer = Completer<void>();

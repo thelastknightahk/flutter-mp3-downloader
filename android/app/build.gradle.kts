@@ -8,13 +8,16 @@ plugins {
 android {
     namespace = "com.prime.audio_background_download"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
-
+    ndkVersion = "27.0.12077973"
+   
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-
+    lint {
+          baseline = file("lint-baseline.xml")
+          disable += "Instantiatable"
+    }   
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
